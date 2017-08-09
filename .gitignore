@@ -1,0 +1,9 @@
+# Created by .ignore support plugin (hsz.mobi)
+.DS_Store
+.gitignore
+.idea/
+factoidEditor.iml
+gulpfile.js
+node_modules/
+package-lock.json
+public/derby/
