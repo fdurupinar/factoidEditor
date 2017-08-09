@@ -1,0 +1,1730 @@
+<Title:>
+    SBGNViz Collaborative Editor  ({{count(_page.doc.messages)}})  - {{_page.doc.users[_session.userId].name}}
+
+<Head:>
+
+
+    <!--<meta charset="utf-8">-->
+    <!--<meta http-equiv="X-UA-Compatible" content="IE=Edge">-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+
+
+    <link href="node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+    <!--cytoscape.js plugins -->
+    <link href="node_modules/cytoscape-panzoom/cytoscape.js-panzoom.css" rel="stylesheet" type="text/css" />
+    <link href="node_modules/cytoscape-panzoom/font-awesome-4.0.3/css/font-awesome.css" rel="stylesheet" type="text/css" />
+    <link href="node_modules/qtip2/dist/jquery.qtip.css" rel="stylesheet" type="text/css" />
+    <link href="node_modules/cytoscape-context-menus/cytoscape-context-menus.css" rel="stylesheet" type="text/css" />
+    <!-- app's style -->
+    <link href="app/css/chise.css" rel="stylesheet">
+    <link href="lib/css/jquery.highlighttextarea.css" rel="stylesheet">
+    <link href="lib/css/jquery-ui.css" rel="stylesheet">
+
+
+
+<Body:>
+
+    <script src="node_modules/ocanvas/build/dist/latest/ocanvas.min.js"></script>
+    <script src="app/bundle.js"></script>
+    <!-- libraries -->
+    <script src="node_modules/qtip2/dist/jquery.qtip.js"></script>
+    <!--<script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>-->
+
+    <script src="lib/js/jquery.noty.packaged.js"></script>
+
+
+    <script src="lib/js/jquery.panzoom.js"></script>
+    <script src="lib/js/jquery.mousewheel.js"></script>
+
+    <script src="lib/js/jquery.highlighttextarea.js"></script>
+    <script src="lib/js/jquery-ui.js"></script>
+
+
+
+    <!---->
+    <!--<script src="node_modules/ocanvas/build/dist/latest/ocanvas.min.js"></script>-->
+    <!--<script src="node_modules/jquery/dist/jquery.js"></script>-->
+    <!--<script src="node_modules/qtip2/dist/jquery.qtip.js"></script>-->
+
+    <!--<script src="node_modules/cytoscape-qtip/cytoscape-qtip.js"></script>-->
+
+    <script src="lib/js/socket.io.js"></script>
+
+    <!--<body>-->
+    <div class="nav-menu sbgn-nav-menu">
+        <nav class="navbar navbar-default sbgn-nav-bar" role="navigation">
+            <div>
+                <img class="newt-logo" height="25" width="auto" src="app/img/newt-logo.png"/>
+                <ul class="nav navbar-nav navbar-left">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            File
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <input id="file-input" type="file" style="display:none" />
+                            <li><a href="#" type="file" id="new-file">New</a></li>
+                            <li><a href="#" type="file" id="load-file">Load...</a></li>
+                            <li class="dropdown-submenu">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    Samples
+                                    <!--<b class="right-caret"></b>-->
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" id="load-sample1">Neuronal muscle signaling</a></li>
+                                    <li><a href="#" id="load-sample2">CaM-CaMK dependent signaling to the nucleus</a></li>
+                                    <li><a href="#" id="load-sample3">Activated STAT1alpha induction of the IRF1 gene</a></li>
+                                    <li><a href="#" id="load-sample4">Glycolysis</a></li>
+                                    <li><a href="#" id="load-sample5">MAPK cascade</a></li>
+                                    <li><a href="#" id="load-sample6">PolyQ proteins interference</a></li>
+                                    <li><a href="#" id="load-sample7">Insulin-like Growth Factor (IGF) signalling</a></li>
+                                    <li><a href="#" id="load-sample8">ATM mediated phosphorylation of repair proteins</a></li>
+                                    <li><a href="#" id="load-sample9">Vitamins B6 activation to pyridoxal phosphate</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#" id="save-as-sbgnml">Save...</a></li>
+                            <li class="dropdown-submenu">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    Save as Image
+                                    <!--<b class="right-caret"></b>-->
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" id="save-as-png">PNG</a></li>
+                                    <li><a href="#" id="save-as-jpg">JPG</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#" id="general-properties">Properties...</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Edit
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" id="add-complex-for-selected" >Add Complex for Selected</a></li>
+                            <li><a href="#" id="add-compartment-for-selected" >Add Compartment for Selected</a></li>
+                            <li><a href="#" id="create-reaction-template" >Add From Template...</a></li>
+                            <li><a href="#" id="clone-selected" >Clone Selected</a></li>
+
+                            <li class="divider"></li>
+                            <li><a href="#" id="delete-selected-simple">Delete Selected Simple</a></li>
+                            <li><a href="#" id="delete-selected-smart">Delete Selected Smart</a></li>
+
+                            <li class="divider"></li>
+                            <li class="disabled"><a href="#" id="undo-last-action" >Undo</a></li>
+                            <li class="disabled"><a href="#" id="redo-last-action" >Redo</a></li>
+
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            View
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-submenu">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    Select
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" id="select-all">All Nodes and Edges</a></li>
+                                    <li><a href="#" id="select-all-nodes">All Nodes</a></li>
+                                    <li><a href="#" id="select-all-edges">All Edges</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="dropdown-submenu">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    Hide/Show
+                                    <!--<b class="right-caret"></b>-->
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" id="hide-selected">Hide Selected</a></li>
+                                    <li><a href="#" id="show-selected">Show Selected</a></li>
+                                    <li><a href="#" id="show-hidden-neighbors-of-selected">Show Hidden Neighbors of Selected</a></li>
+                                    <li><a href="#" id="show-all">Show All</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="dropdown-submenu">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    Collapse/Expand
+                                    <!--<b class="right-caret"></b>-->
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" id="collapse-selected">Collapse Selected</a></li>
+                                    <li><a href="#" id="expand-selected">Expand Selected</a></li>
+                                    <li><a href="#" id="collapse-complexes">Collapse Complexes</a></li>
+                                    <li><a href="#" id="expand-complexes">Expand Complexes</a></li>
+                                    <li><a href="#" id="collapse-all">Collapse All</a></li>
+                                    <li><a href="#" id="expand-all">Expand All</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="dropdown-submenu">
+                                <a href="#" id="add-node-menu-option" class="dropdown-toggle" data-toggle="dropdown">
+                                    Align
+                                    <!--<b class="right-caret"></b>-->
+                                </a>
+                                <ul class="dropdown-menu" id="add-node-submenu">
+                                    <li class="dropdown-submenu">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                            Horizontal
+                                            <!--<b class="right-caret"></b>-->
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#" id="align-horizontal-top">Top</a></li>
+                                            <li><a href="#" id="align-horizontal-middle">Middle</a></li>
+                                            <li><a href="#" id="align-horizontal-bottom">Bottom</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown-submenu">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                            Vertical
+                                            <!--<b class="right-caret"></b>-->
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#" id="align-vertical-left">Left</a></li>
+                                            <li><a href="#" id="align-vertical-center">Center</a></li>
+                                            <li><a href="#" id="align-vertical-right">Right</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="dropdown-submenu">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    Color Schemes
+                                    <!--<b class="right-caret"></b>-->
+                                </a>
+                                <ul id="color-scheme-menu" class="dropdown-menu">
+                                    <!-- template for color-scheme -->
+                                </ul>
+                            </li>
+                            <li><a href="#" id="grid-properties" style="padding-right: 30px;">Grid and Guidelines...</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Highlight
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" id="highlight-search-menu-item">Search ...</a></li>
+                            <li><a href="#" id="highlight-neighbors-of-selected">Neighbors of Selected</a></li>
+                            <li><a href="#" id="highlight-processes-of-selected">Processes of Selected</a></li>
+                            <li><a href="#" id="remove-highlights">Remove Highlights</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Layout
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" id="perform-layout">Perform Layout</a></li>
+                            <li><a href="#" id="layout-properties">Layout Properties...</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Query
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-submenu">
+                                <a href="#" id="query-pathwaycommons" class="dropdown-toggle" data-toggle="dropdown">
+                                    Pathway Commons
+                                    <!--<b class="right-caret"></b>-->
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" id="query-pathsbetween">Paths Between...</a></li>
+                                    <li><a href="#" id="query-pathsbyURI">By URI...</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Legends
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" id="node-legend">Node Legend</a></li>
+                            <li><a href="#" id="edge-legend">Edge Legend</a></li>
+                        </ul>
+                    </li>
+
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Help
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" id="quick-help">Quick Help</a></li>
+                            <li><a href="#" id="about">About</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <span class="input-file" id="file-name" style="display: none;"></span>
+            </div>
+        </nav>
+    </div>
+
+    <div id="sbgn-toolbar" style="margin-top: 10px;">
+        <table width="100%" height="100%" align="center" valign="center"> <tbody>
+            <tr><td>
+                <div class="inside-menu">
+                    <img id="new-file-icon" class="sbgn-toolbar-element" src="app/img/toolbar/new.svg" title="New: Create a blank SBGN-PD map">
+                    <img id="load-file-icon" class="sbgn-toolbar-element" src="app/img/toolbar/load.svg" title="Load: Load an SBGN-PD map from SBGN-ML file">
+                    <img id="save-icon" class="sbgn-toolbar-element" src="app/img/toolbar/save.svg" title="Save: Save current SBGN-PD map to an SBGN-ML file">
+                    <img id="properties-icon" class="sbgn-toolbar-element" src="app/img/toolbar/settings.svg" title="Properties: Modify general properties of current SBGN-PD map" >
+                </div>
+
+                <div class="menu-break-large sbgn-toolbar-element"></div>
+                <div class="inside-menu">
+
+                    <div style="padding: 1px;" class="sbgn-toolbar-element"><img id="select-mode-icon" src="app/img/toolbar/select.svg" title="Select / Edit" ></div>
+                    <div style="padding: 1px;" class="sbgn-toolbar-element"><img id="add-node-mode-icon" src="app/img/nodes/unspecified-entity.svg" title="Create a new Unspecified Entity" ></div>
+                    <div style="padding: 1px;" class="sbgn-toolbar-element"><img id="add-edge-mode-icon" src="app/img/edges/consumption.svg" title="Create a new Consumption" ></div>
+
+                    <div class="menu-break-small sbgn-toolbar-element"> </div>
+
+                    <img id="delete-selected-simple-icon" class="sbgn-toolbar-element" src="app/img/toolbar/delete-simple.svg" title="Delete Selected Simple: Delete selected nodes and edges" >
+                    <img id="delete-selected-smart-icon" class="sbgn-toolbar-element" src="app/img/toolbar/delete-smart.svg" title="Delete Selected Smart: Delete selected nodes and any processes they are involved in" >
+
+                    <div class="menu-break-small sbgn-toolbar-element"> </div>
+                    <img id="undo-icon" class="sbgn-toolbar-element" src="app/img/toolbar/undo.svg" title="Undo: Undo the last operation" >
+                    <img id="redo-icon" class="sbgn-toolbar-element" src="app/img/toolbar/redo.svg" title="Redo: Redo the last undone operation" >
+
+                </div>
+
+                <div class="menu-break-large sbgn-toolbar-element"> </div>
+                <div class="inside-menu">
+                    <img id="hide-selected-icon" class="sbgn-toolbar-element" src="app/img/toolbar/hide-selected.svg" title="Hide Selected: Hide selected nodes and any processes they are involved in" >
+                    <img id="show-selected-icon" class="sbgn-toolbar-element" src="app/img/toolbar/show-selected.svg" title="Show Selected: Show selected nodes and any processes they are involved in, hiding the remaining nodes and their edges" >
+
+                    <div class="menu-break-small sbgn-toolbar-element"> </div>
+                    <img id="collapse-selected-icon" class="sbgn-toolbar-element" src="app/img/toolbar/collapse-selected.svg" title="Collapse Selected: Collapse selected compound node to hide its members" >
+                    <img id="expand-selected-icon" class="sbgn-toolbar-element" src="app/img/toolbar/expand-selected.svg" title="Expand Selected: Expand selected collapsed node to show its members" >
+
+                    <div class="menu-break-small sbgn-toolbar-element"> </div>
+                    <div class="btn-group sbgn-toolbar-element sbgn-dd-list" role="group" id="align-list">
+                        <button id="align-button" title="Align to First Selected: Align positions of selected nodes based on the first (if any) selected node" type="button" class="btn" aria-haspopup="true" aria-expanded="false">
+                            <div style="height: 16px;">
+                                <img style="float: left; height: 16px; width: auto;" id="sbgn-align-img" src="app/img/align/align.svg"/>
+                                <!--<span style="float: right;" class="caret"></span>-->
+                            </div>
+                        </button>
+                        <button id="align-dd-button" type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <div style="height: 16px;">
+                                <span class="caret"></span>
+                                <span class="sr-only"></span>
+                            </div>
+                        </button>
+                        <ul id="align-menu" class="dropdown-menu" >
+                            <li><a class="dd-list-href" href="#" id="align-horizontal-top-icon"> <img src="app/img/align/align-horizontal-top.svg"/>  Align Horizontal Top</a></li>
+                            <li><a class="dd-list-href" href="#" id="align-horizontal-middle-icon"> <img src="app/img/align/align-horizontal-middle.svg"/>  Align Horizontal Middle</a></li>
+                            <li><a class="dd-list-href" href="#" id="align-horizontal-bottom-icon"> <img src="app/img/align/align-horizontal-bottom.svg"/>  Align Horizontal Bottom</a></li>
+                            <li><a class="dd-list-href" href="#" id="align-vertical-left-icon"> <img src="app/img/align/align-vertical-left.svg"/>  Align Vertical Left</a></li>
+                            <li><a class="dd-list-href" href="#" id="align-vertical-center-icon"> <img src="app/img/align/align-vertical-center.svg"/>  Align Vertical Center</a></li>
+                            <li><a class="dd-list-href" href="#" id="align-vertical-right-icon"> <img src="app/img/align/align-vertical-right.svg"/>  Align Vertical Right</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="menu-break-small sbgn-toolbar-element"> </div>
+                    <img id="toggle-grid-snapping-icon" class="sbgn-toolbar-element" src="app/img/toolbar/grid.svg" title="Enable Grid: Show and snap to grid on mouse release" >
+
+                    <img id="toggle-guidelines-snapping-icon" class="sbgn-toolbar-element" src="app/img/toolbar/guidelines.svg" title="Enable Guidelines: Enable and snap to alignment guidelines on mouse release" >
+
+                </div>
+
+                <div class="menu-break-large sbgn-toolbar-element"> </div>
+                <div class="inside-menu">
+                    <img id="search-by-label-icon" class="sbgn-toolbar-element" src="app/img/toolbar/search.svg" title="Search: Search and find (case insensitive) all nodes with specified label text, selecting them and highlighting them along with their processes" >
+                    <input id="search-by-label-text-box" class="sbgn-toolbar-element" type="label">
+                    <img id="highlight-neighbors-of-selected-icon" class="sbgn-toolbar-element" src="app/img/toolbar/highlight-neighbors-of-selected.svg" title="Highlight Neighbors of Selected: Highlight selected nodes and their neighbors by ghosting remaining nodes" >
+                    <img id="remove-highlights-icon" class="sbgn-toolbar-element" src="app/img/toolbar/remove-highlights.svg" title="Remove Highlights: Remove any highlights" >
+                </div>
+
+                <div class="menu-break-large sbgn-toolbar-element"> </div>
+                <div class="inside-menu">
+                    <img id="perform-layout-icon" class="sbgn-toolbar-element" src="app/img/toolbar/layout-cose.svg" title="Perform Layout: Perform a force-directed layout of current map, maintaining compound structures" >
+                    <img id="layout-properties-icon" class="sbgn-toolbar-element" src="app/img/toolbar/layout-properties.svg" title="Layout Properties: Modify parameters used during layout" >
+                </div>
+            </td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
+
+
+    <table id="sbgn-inspector-and-canvas">
+        <tbody>
+        <tr>
+            <td>
+
+                <div id ="canvas-tab-area"  >
+
+                    <div class="tab-content">
+                <!--focus should be here add tabindex -->
+                        <div id="sbgn-network-container" tabindex="0" class = "tab-pane fade in active"></div>
+                        {{ each _page.doc.images as #imageFile}}
+                        <div id={{"static-image-container-"+#imageFile.tabIndex}}  class = "tab-pane" >
+
+                            <section id = {{"section-"+#imageFile.tabIndex}} style = 'height:100%; width:100%'>
+                                <div class="parent" style = 'height:100%; width:100%'>
+                                <div class="panzoom">
+                                    <img style='height: 100%; width: 100%; object-fit: contain' src= "{{#imageFile.img}}" />
+                                </div>
+                                </div>
+
+                                <script>
+                                    function closeTab(el){
+                                        el.parentElement.style.display='none';
+                                        $("#defaultOpen").click();
+                                    }
+
+                                    (function() {
+                                        var tabInd = {{#imageFile.tabIndex}};
+                                        var $section = $('#section-' + tabInd);
+                                        var $panzoom = $section.find('.panzoom').panzoom();
+                                        $panzoom.parent().on('mousewheel.focal', function( e ) {
+                                            e.preventDefault();
+                                            var delta = e.delta || e.originalEvent.wheelDelta;
+                                            var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
+                                            $panzoom.panzoom('zoom', zoomOut, {
+                                                increment: 0.1,
+                                                animate: false,
+                                                focal: e
+                                            });
+                                        });
+                                    })();
+                                </script>
+                            </section>
+
+
+                        </div>
+                        {{/each}}
+                    </div>
+                </div>
+
+
+            </td>
+
+            <td>
+                <view is='inspector-view'></view>                    <!--<div id="sbgn-inspector">-->
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <div id = "canvas-tabs">
+
+                <ul class="nav nav-tabs">
+
+                    <li class = "active tab-link" ><a data-toggle="tab" id = "defaultOpen" href="#sbgn-network-container">Sbgn</a></li>
+                    {{ each _page.doc.images as #imageFile}}
+
+
+                    <li class = "tab-link">
+                        <span onclick= closeTab(this) class="close-icon"></span>
+
+                        <a data-toggle="tab" href={{"#static-image-container-"+#imageFile.tabIndex}}>
+
+
+
+                             {{#imageFile.tabLabel}}</a></li>
+                    {{/each}}
+                </ul>
+            </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div id="layout-properties-table" tabindex="-1" class="modal fade" role="dialog">
+        <!-- sbgn layout table will be shown here -->
+    </div>
+
+    <div id="general-properties-table" tabindex="-1" class="modal fade" role="dialog">
+        <!-- sbgn properties table will be shown here-->
+    </div>
+
+    <div id="biogene-container" style="display: none">
+    </div>
+
+    <div id="query-pathsbetween-table" tabindex="-1" class="modal fade" role="dialog">
+        <!-- paths between query table will be shown here-->
+    </div>
+
+    <div id="query-pathsbyURI-table" tabindex="-1" class="modal fade" role="dialog">
+        <!-- paths by URI query table will be shown here-->
+    </div>
+
+    <div id="prompt-save-table" tabindex="-1" class="modal fade" role="dialog">
+        <!-- sbgn properties table will be shown here-->
+    </div>
+
+    <div id="file-save-table" tabindex="-1" class="modal fade" role="dialog">
+        <!-- save dialog will be shown here-->
+    </div>
+
+    <div id="prompt-confirmation-table" tabindex="-1" class="modal fade" role="dialog">
+        <!-- confirmation dialog will be shown here-->
+    </div>
+
+    <div id="reaction-template-table" tabindex="-1" class="modal fade" role="dialog">
+        <!-- paths between query table will be shown here -->
+    </div>
+
+    <div id="grid-properties-table" tabindex="-1" class="modal fade" role="dialog">
+        <!-- grid properties table will be shown here -->
+    </div>
+
+    <div id="font-properties-table" tabindex="-1" class="modal fade" role="dialog">
+        <!-- sbgn properties table will be shown here -->
+    </div>
+
+    <div id="box">
+    </div>
+
+    <div id="idxCard-container" style="display: none">
+    </div>
+    <!--<input id="node-label-textbox" type="text"></input>-->
+
+    <!-- templates -->
+    <!-- templates -->
+    <div id='node_legend_modal' class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog sbgn-modal-dialog" style="width: 504px; height: 325px;">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="sbgn-frame">
+                        <h2 class="sbgn-text">Node Legend</h2>
+                        <img src="app/img/node_legend_sbgn.png" alt="" class="centered img-responsive sbgn-legend">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id='edge_legend_modal' class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog sbgn-modal-dialog" style="width: 325px; height: 285px;">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="sbgn-frame">
+                        <h2 class="sbgn-text">Edge Legend</h2>
+                        <img src="app/img/interaction_legend_sbgn.png" alt="" class="centered img-responsive sbgn-legend">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id='about_modal' class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm sbgn-modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="sbgn-frame">
+                        <h2 class="sbgn-text">About</h2>
+
+                        <table width="100%" height="100%" align="center" valign="center">
+                            <tbody>
+
+                            <tr><td>
+                                <p id="about-newt-version" class="sbgn-text">Newt Editor version 0.1</p>
+                            </td></tr>
+
+                            <tr><td>
+                                <img src="app/img/newt-logo.png" alt="" class="centered img-responsive" style="margin-bottom: 10px;">
+                            </td></tr>
+
+                            <tr><td>
+                                <p class="address-text marg">i-Vis Information Visualization Group</p>
+                                <p class="address-text">Bilkent University, Ankara, Turkey</p>
+                            </td></tr>
+
+                            <tr><td>
+                                <p class="address-text marg">
+                                    <a href="mailto:ivis@cs.bilkent.edu.tr" target="_top">ivis@cs.bilkent.edu.tr</a>
+                                </p>
+                                <p class="address-text">
+                                    <a href="https://github.com/iVis-at-Bilkent/chise.js" target="_blank">https://github.com/iVis-at-Bilkent/newt</a>
+                                </p>
+                            </td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id='quick_help_modal' class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog sbgn-modal-dialog" style="width: 420px">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="sbgn-frame quick-help">
+                        <h2 class="sbgn-text">Quick Help</h2>
+                        <div class="quick-help-content">
+                            <table align="center" valign="center"> <tbody>
+                                <tr>
+                                    <td><b>File | Samples | &lt;sample file&gt;</b>:
+                                        Load a sample model from file in SBGN-ML</td>
+                                </tr>
+                                <tr>
+                                    <td><b>File | Load</b>:
+                                        Load a model from file in SBGN-ML</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Left-click</b>:
+                                        Full label of the node</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Right-click</b>:
+                                        Context menu for associated object</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Ctrl + drag</b>:
+                                        Transfer a node in and out of a compound node</td>
+                                </tr>
+                            </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/template" id="loading-small-template">
+        <p class="sbgn-text"> <%= name %> </p>
+        <img class="centered" src="app/img/loading-small.gif" height="auto" width="auto" align="middle">
+    </script>
+
+    <script type="text/template" id="layout-settings-template">
+        <div class="modal-dialog modal-sm sbgn-modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Layout Properties</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table-condensed layout-table dialog-table"> <tbody>
+                        <tr>
+                            <td>
+                                <span class="add-on layout-text"> Node Repulsion </span>
+                            </td>
+                            <td>
+                                <input id="node-repulsion" type="text" min="0" class="sbgn-input-small layout-text float-input" value= <%= nodeRepulsion %> >
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span class="add-on layout-text"> Ideal Edge Length </span>
+                            </td>
+                            <td>
+                                <input id="ideal-edge-length" type="text" min="5" class="sbgn-input-small layout-text float-input" value= <%= idealEdgeLength %> >
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span class="add-on layout-text"> Edge Elasticity </span>
+                            </td>
+                            <td>
+                                <input id="edge-elasticity" type="text" min="0" class="sbgn-input-small layout-text float-input" value= <%= edgeElasticity %> >
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span class="add-on layout-text"> Nesting Factor </span>
+                            </td>
+                            <td>
+                                <input id="nesting-factor" type="text" min="0" class="sbgn-input-small layout-text float-input" value= <%= nestingFactor %> >
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span class="add-on layout-text"> Gravity </span>
+                            </td>
+                            <td>
+                                <input id="gravity" type="text" min="0" class="sbgn-input-small layout-text float-input" value= <%= gravity %> >
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span class="add-on layout-text"> Gravity Range   </span>
+                            </td>
+                            <td>
+                                <input id="gravity-range" type="text" min="0" class="sbgn-input-small layout-text float-input" value= <%= gravityRange %> >
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span class="add-on layout-text"> Compound Gravity  </span>
+                            </td>
+                            <td>
+                                <input id="gravity-compound" type="text" min="0" class="sbgn-input-small layout-text float-input" value= <%= gravityCompound %> >
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span class="add-on layout-text"> Compound Gravity Range </span>
+                            </td>
+                            <td>
+                                <input id="gravity-range-compound" type="text" min="0" class="sbgn-input-small layout-text float-input" value= <%= gravityRangeCompound %> >
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span class="add-on layout-text"> Number of Iterations </span>
+                            </td>
+                            <td>
+                                <input id="num-iter" type="text" min="0" class="sbgn-input-small layout-text integer-input" value= <%= numIter %> >
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span class="add-on layout-text"> Tiling Vertical Padding </span>
+                            </td>
+                            <td>
+                                <input id="tiling-padding-vertical" type="text" min="0" class="sbgn-input-small layout-text integer-input" value= <%= tilingPaddingVertical %> >
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span class="add-on layout-text"> Tiling Horizontal Padding </span>
+                            </td>
+                            <td>
+                                <input id="tiling-padding-horizontal" type="text" min="0" class="sbgn-input-small layout-text integer-input" value= <%= tilingPaddingHorizontal %> >
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span class="add-on layout-text"> Tile Disconnected </span>
+                            </td>
+
+                            <td>
+                                <input id="tile" type="checkbox" class="layout-text" <% if (tile){ %> checked<%}%>>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span class="add-on layout-text"> Animate </span>
+                            </td>
+
+                            <td>
+                                <input id="animate" type="checkbox" class="layout-text" <% if (animate === 'during'){ %> checked<%}%>>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="add-on layout-text"> Incremental </span>
+                            </td>
+
+                            <td>
+                                <input id="incremental" type="checkbox" class="layout-text" <% if (!randomize){ %> checked<%}%>>
+                            </td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer" style="text-align: center">
+                    <button id="save-layout" class="btn btn-default"  >Save</button>
+                    <button id="default-layout" class="btn btn-default">Default</button>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/template" id="general-properties-template">
+        <div class="modal-dialog modal-sm sbgn-modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Properties</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table-condensed layout-table dialog-table"> <tbody>
+                        <tr>
+                            <td>
+                                <span class="add-on layout-text"> Compound Padding </span>
+                            </td>
+
+                            <td>
+                                <input id="compound-padding" type="text" class="sbgn-input-small layout-text integer-input" min="0" max="100" value= <%= compoundPadding %> > %
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span class="add-on layout-text"> Label Size </span>
+                            </td>
+
+                            <td>
+                                <select id="dynamic-label-size-select"  class="sbgn-input-medium" name="dynamic-label-size">
+                                    <option id="dynamic-label-size_small" value="small" <% if (dynamicLabelSize == 'small'){ %> selected<%}%> > Small </option>
+                                    <option id="dynamic-label-size_regular" value="regular" <% if (dynamicLabelSize == 'regular'){ %> selected<%}%> > Regular </option>
+                                    <option id="dynamic-label-size_large" value="large" <% if (dynamicLabelSize == 'large'){ %> selected<%}%> > Large </option>
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span class="add-on layout-text"> Fit Labels To Nodes </span>
+                            </td>
+
+                            <td>
+                                <input id="fit-labels-to-nodes" type="checkbox" class="layout-text" <% if (fitLabelsToNodes){ %> checked<%}%>>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span class="add-on layout-text"> Rearrange After Expand-Collapse </span>
+                            </td>
+
+                            <td>
+                                <input id="rearrange-after-expand-collapse" type="checkbox" class="layout-text" <% if (rearrangeAfterExpandCollapse){ %> checked<%}%>>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span class="add-on layout-text"> Animate on Drawing Changes </span>
+                            </td>
+
+                            <td>
+                                <input id="animate-on-drawing-changes" type="checkbox" class="layout-text" <% if (animateOnDrawingChanges){ %> checked<%}%>>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span class="add-on layout-text"> Adjust Node Label Font Size Automatically </span>
+                            </td>
+
+                            <td>
+                                <input id="adjust-node-label-font-size-automatically" type="checkbox"  class="layout-text" <% if (adjustNodeLabelFontSizeAutomatically){ %> checked<%}%>>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span class="add-on layout-text"> Map Color Scheme </span>
+                            </td>
+
+                            <td>
+                                <select id="map-color-scheme-select" name="map-color-scheme">
+                                    <% var i=0; for( var scheme_id in mapColorSchemes) { %>
+                                    <option id="map-color-scheme_<%= i %>" value="<%= scheme_id %>" <% if (mapColorScheme == scheme_id){ %> selected<%}%> > <%= mapColorSchemes[scheme_id]['name'] %> </option>
+                                    <% i++;} %>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer" style="text-align: center">
+                    <button id="save-sbgn" class="btn btn-default" >Save</button>
+                    <button id="default-sbgn" class="btn btn-default">Default</button>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/template" id="query-pathsbetween-template">
+        <div class="modal-dialog sbgn-modal-dialog" style="width: 500px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Paths Between Query</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table-condensed layout-table"> <tbody>
+                        <tr>
+                            <th colspan=2 style="padding-left: 0px;" align="left">
+                                <span class="add-on layout-text"> Find all paths of specified length limit between any two entities of the specified set </span>
+                            </th>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span class="add-on layout-text"> Gene Symbols: </span><br>
+                                <textarea id="query-pathsbetween-gene-symbols" rows="4" cols="86" style="width: 206px;"><%= geneSymbols %></textarea>
+                            </td>
+
+                            <td>
+                                <table frame="box" style="border-color: rgb(204, 204, 204)">
+                                    <caption style="text-align: left;">Stop Distance</caption>
+                                    <tr>
+                                        <td colspan=2>Length limit</td>
+                                        <td style="padding: 10px;"><input id="query-pathsbetween-length-limit" type="text" min="1" class="sbgn-input-small layout-text integer-input" style="width: 90px;" value= <%= lengthLimit %> > </td>
+                                    </tr>
+                                </table>
+                            </td>
+
+                        </tr>
+                    </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer" style="text-align: center">
+                    <button id="save-query-pathsbetween" class="btn btn-default" >OK</button>
+                    <button id="cancel-query-pathsbetween" class="btn btn-default">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/template" id="query-pathsbyURI-template">
+        <div class="modal-dialog sbgn-modal-dialog" style="width: 500px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Paths By URI</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table-condensed layout-table">
+                        <tbody>
+                        <tr>
+                            <th colspan=3 style="padding-left: 0px;" align="left">
+                                <span class="add-on layout-text"> Display paths of the specified URI </span>
+                            </th>
+                        </tr>
+
+                        <tr>
+                            <td>Enter URI of a pathway</td>
+                            <td style="padding: 10px;"><input id="query-pathsbyURI-URI" type="text"  style="width: 300px;" value= <%= URI %> > </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer" style="text-align: center">
+                    <button id="save-query-pathsbyURI" class="btn btn-default" >OK</button>
+                    <button id="cancel-query-pathsbyURI" class="btn btn-default">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/template" id="prompt-save-template">
+        <div class="modal-dialog sbgn-modal-dialog" style="width: 350px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Save</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table-condensed layout-table dialog-table"> <tbody>
+                        <tr>
+                            <th style="padding-left: 0px;" align="left">
+                                <span class="add-on layout-text"> Do you want to save any change(s) to the map? </span>
+                            </th>
+                        </tr>
+
+                        <tr id="prompt-save-buttons" style="padding-bottom: 0px; margin-bottom: 0px;">
+                            <td>
+                            </td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer" style="text-align: center">
+                    <button id="prompt-save-accept" class="btn btn-default" >Save</button>
+                    <button id="prompt-save-reject" class="btn btn-default">Don't Save</button>
+                    <button id="prompt-save-cancel" class="btn btn-default">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/template" id="file-save-template">
+        <div class="modal-dialog sbgn-modal-dialog" style="width: 350px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Save</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table-condensed layout-table dialog-table" style="margin: auto;"> <tbody>
+                        <tr>
+                            <td style="padding-left: 0px;" align="left">
+                                <span class="add-on layout-text"> Filename </span>
+                            </td>
+                            <td>
+                                <input id="file-save-filename" type="text" />
+                            </td>
+                        </tr>
+
+                        <tr id="file-save-buttons" style="padding-bottom: 0px; margin-bottom: 0px;">
+                            <td>
+                            </td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer" style="text-align: center">
+                    <button id="file-save-accept" class="btn btn-default">Save</button>
+                    <button id="file-save-cancel" class="btn btn-default">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/template" id="prompt-confirmation-template">
+        <div class="modal-dialog sbgn-modal-dialog" style="width: 400px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Confirmation</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table-condensed layout-table dialog-table" style="margin: auto;"> <tbody>
+                        <tr>
+                            <th style="padding-left: 0px;" align="left">
+                                <span class="add-on layout-text">All unsaved changes will be lost. Do you want to continue?</span>
+                            </th>
+                        </tr>
+
+                        <tr id="prompt-confirmation-buttons" style="padding-bottom: 0px; margin-bottom: 0px;">
+                            <td>
+                            </td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer" style="text-align: center">
+                    <button id="prompt-confirmation-accept" class="btn btn-default">Yes</button>
+                    <button id="prompt-confirmation-cancel" class="btn btn-default">No</button>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/template" id="reaction-template-template">
+        <div class="modal-dialog modal-sm sbgn-modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Template</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table-condensed layout-table dialog-table"><tbody>
+
+                        <tr>
+                            <td style="padding-bottom: 10px;" align="right" valign="middle">
+                                <span class="add-on layout-text"> <b> Type </b> </span>
+                            </td>
+
+                            <td>
+                                <select id="reaction-template-type-select" class='sbgn-input-medium layout-text' name="reaction-template-type">
+                                    <option id="reaction-template-type-association" value="association" <% if (templateType == 'association'){ %> selected<%}%> > Association </option>
+                                    <option id="reaction-template-type-dissociation" value="dissociation" <% if (templateType == 'dissociation'){ %> selected<%}%> > Dissociation </option>
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td align="center" valign="middle" style="margin-left: 5px;">
+                                <span class="add-on layout-text"> <b> Input </b> </span>
+                            </td>
+
+                            <td align="center" valign="middle" style="margin-right: 5px;">
+                                <span class="add-on layout-text"> <b> Output </b> </span>
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <td>
+                                <%= getInputHtml() %>
+                            </td>
+
+                            <td>
+                                <%= getOutputHtml() %>
+                            </td>
+
+                        </tr>
+                    </tbody>
+
+                    </table>
+                </div>
+                <div class="modal-footer" style="text-align: center">
+                    <button id="create-template" class="btn btn-default" >Create</button>
+                    <button id="cancel-template" class="btn btn-default">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/template" id="grid-properties-template">
+        <div class="modal-dialog sbgn-modal-dialog" style="width: 573px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Grid  and Guidelines Properties</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table-condensed layout-table dialog-table property-table" style="padding-bottom: 4px;"> <tbody>
+                        <tr> <th> Grid </th> </tr>
+                        <tr>
+                            <td style="padding-right: 20px;">
+                                <input id="show-grid" type="checkbox" class="layout-text" <% if (showGrid){ %> checked<%}%>>
+                                <span class="add-on layout-text"> Show Grid </span>
+                            </td>
+                            <td style="padding-right: 25px;">
+                                <span class="add-on layout-text"> Grid Size </span>
+                                <input id="grid-size" type="text" min="5" class="sbgn-input-small layout-text integer-input" value= <%= gridSize %> >
+                            </td>
+                            <td>
+                                <input id="auto-resize-nodes" type="checkbox" class="layout-text" <% if (autoResizeNodes){ %> checked<%}%>>
+                                <span class="add-on layout-text"> Auto  Resize Nodes </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                    </table>
+                    <table class="table-condensed layout-table dialog-table property-table" style="padding-bottom: 4px;"><tbody>
+                        <tr> <th> Snap Policy </th> </tr>
+                        <tr>
+                            <td>
+                                <input id="no-snap" type="radio" name="snap-policy" class="layout-text" <% if (!discreteDrag && !snapToGrid && ! snapToAlignmentLocation){ %> checked<%}%>>
+                                <span class="add-on layout-text"> No Snap </span>
+                            </td>
+                            <td>
+                                <input id="discrete-drag" type="radio" name="snap-policy" class="layout-text" <% if (discreteDrag){ %> checked<%}%>>
+                                <span class="add-on layout-text"> Discrete Drag </span>
+                            </td>
+                            <td>
+                                <input id="snap-to-grid" type="radio" name="snap-policy" class="layout-text" <% if (snapToGrid){ %> checked<%}%>>
+                                <span class="add-on layout-text"> Snap to Grid </span>
+                            </td>
+                            <td>
+                                <input id="snap-to-alignment-location" type="radio" name="snap-policy" class="layout-text" <% if (snapToAlignmentLocation){ %> checked<%}%>>
+                                <span class="add-on layout-text"> Snap to Alignment Location </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <table class="table-condensed layout-table dialog-table property-table" style="padding-bottom: 4px !important;"><tbody>
+                        <tr> <th colspan="100%"> Alignment Guidelines </th> </tr>
+                        <tr>
+                            <td style="padding-bottom: 20px !important; width: 140px;">
+                                <span class="add-on layout-text"> Reference Guideline</span>
+                            </td>
+                            <td style="padding-bottom: 20px !important;">
+                                <input id="show-init-Pos-Alignment" type="checkbox" class="layout-text" <% if (showInitPosAlignment){ %> checked<%}%>>
+                            </td>
+                            <td style="padding-bottom: 20px !important; padding-left: 0px;">
+                                Style
+                            </td>
+                            <td style="padding-bottom: 20px !important;">
+                                <input id="init-Pos-Alignment-Color" type="color" class="sbgn-input-small layout-text" value= <%= initPosAlignmentColor %> >
+                            </td>
+
+                            <td style="padding-bottom: 20px !important;">
+                                <select name="init-Pos-Alignment-Line">
+                                    <option value="0,0" <% if (initPosAlignmentLine[0] == 0 && initPosAlignmentLine[1] == 0){ %> selected<% }%> > Solid </option>
+                                    <option value="3,5" <% if (initPosAlignmentLine[0] != 0 || initPosAlignmentLine[1] != 0){ %> selected<% }%> > Dashed </option>
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="padding-bottom: 20px !important; width: 140px;">
+                                <span class="add-on layout-text"> Geometric Guidelines </span>
+                            </td>
+
+                            <td style="padding-bottom: 20px !important;">
+                                <input id="show-geometric-guidelines" type="checkbox" class="layout-text" <% if (showGeometricGuidelines){ %> checked<%}%>>
+                            </td>
+                            <td style="padding-bottom: 20px !important; padding-left: 0px;">
+                                Style
+                            </td>
+                            <td style="padding-bottom: 20px !important;">
+                                <input id="geometric-guideline-color" type="color" class="sbgn-input-small layout-text" value= <%= guidelineColor %> >
+                            </td>
+                            <td style="padding-bottom: 20px !important;">
+                                <select id="geometric-Alignment-Line">
+                                    <option value="0,0" <% if (lineDash[0] == 0 && lineDash[1] == 0){ %> selected<% }%> > Solid </option>
+                                    <option value="3,5" <% if (lineDash[0] != 0 || lineDash[1] != 0){ %> selected<% }%> > Dashed </option>
+                                </select>
+                            </td>
+                            <td style="padding-bottom: 20px !important; padding-left: 35px;">
+                                <span class="add-on layout-text"> Range </span>
+                            </td>
+
+                            <td style="padding-bottom: 20px !important;">
+                                <input id="geometric-alignment-range" type="text" class="sbgn-input-small layout-text float-input" value= <%= geometricAlignmentRange %> >
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td rowspan="2">
+                                <span class="add-on layout-text"> Distribution Guidelines </span>
+                            </td>
+
+                            <td rowspan="2">
+                                <input id="show-distribution-guidelines" type="checkbox" class="layout-text" <% if (showDistributionGuidelines){ %> checked<%}%>>
+                            </td>
+                            <td style="padding-left: 0px;">
+                                <span class="add-on layout-text"> Horizontal </span>
+                            </td>
+
+                            <td>
+                                <input id="horizontal-guideline-color" type="color" class="sbgn-input-small layout-text" value= <%= horizontalGuidelineColor %> >
+                            </td>
+                            <td>
+                                <select name="horizontal-Dist-Alignment-Line">
+                                    <option value="0,0" <% if (horizontalDistLine[0] == 0 && horizontalDistLine[1] == 0){ %> selected<% }%> > Solid </option>
+                                    <option value="3,5" <% if (horizontalDistLine[0] != 0 || horizontalDistLine[1] != 0){ %> selected<% }%> > Dashed </option>
+                                </select>
+                            </td>
+                            <td rowspan="2" style="padding-left: 35px;">
+                                <span class="add-on layout-text"> Range </span>
+                            </td>
+
+                            <td rowspan="2">
+                                <input id="distribution-alignment-range" type="text" class="sbgn-input-small layout-text float-input" value= <%= distributionAlignmentRange %> >
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="padding-left: 0px;>
+            <span class="add-on layout-text"> Vertical </span>
+                            </td>
+
+                            <td>
+                                <input id="vertical-guideline-color" type="color" class="sbgn-input-small layout-text" value= <%= verticalGuidelineColor %> >
+                            </td>
+                            <td>
+                                <select name="vertical-Dist-Alignment-Line">
+                                    <option value="0,0" <% if (verticalDistLine[0] == 0 && verticalDistLine[1] == 0){ %> selected<% }%> > Solid </option>
+                                    <option value="3,5" <% if (verticalDistLine[0] != 0 || verticalDistLine[1] != 0){ %> selected<% }%> > Dashed </option>
+                                </select>
+                            </td>
+
+                        <tr>
+                            <td style="padding-top: 20px !important; width: 140px;">
+                                <span class="add-on layout-text"> Guideline Tolerance </span>
+                            </td>
+
+                            <td style="padding-top: 20px !important;">
+                                <input id="guideline-tolerance" type="text" min="0" class="sbgn-input-small layout-text float-input" value= <%= guidelineTolerance %> >
+                            </td>
+                        </tr>
+
+                        </tr>
+                    </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer" style="text-align: center">
+                    <button id="save-grid" class="btn btn-default" >Save</button>
+                    <button id="default-grid" class="btn btn-default">Default</button>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/template" id="font-properties-template">
+        <div class="modal-dialog modal-sm sbgn-modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Font Properties</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table-condensed layout-table"> <tbody>
+
+                        <tr>
+                            <td>
+                                <span class="add-on layout-text"> Font Family </span>
+                            </td>
+
+                            <td>
+                                <%= getFontFamilyHtml() %>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span class="add-on layout-text"> Font Size </span>
+                            </td>
+                            <td>
+                                <input id="font-properties-font-size" type="text" min="1" class="sbgn-input-small layout-text integer-input" value= <%= fontSize %> >
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span class="add-on layout-text"> Font Weight </span>
+                            </td>
+
+                            <td>
+                                <select id="font-properties-select-font-weight" class='input-medium layout-text' name="font-weight-select">
+                                    <option id="font-properties-font-weight-none" value="" <% if (fontWeight == ''){ %> selected<%}%> >  </option>
+                                    <option id="font-properties-font-weight-lighter" value="lighter" <% if (fontWeight == 'lighter'){ %> selected<%}%> > Lighter </option>
+                                    <option id="font-properties-font-weight-normal" value="normal" <% if (fontWeight == 'normal'){ %> selected<%}%> > Normal </option>
+                                    <option id="font-properties-font-weight-bold" value="bold" <% if (fontWeight == 'bold'){ %> selected<%}%> > Bold </option>
+                                    <option id="font-properties-font-weight-bolder" value="bolder" <% if (fontWeight == 'bolder'){ %> selected<%}%> > Bolder </option>
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span class="add-on layout-text"> Font Type </span>
+                            </td>
+
+                            <td>
+                                <select id="font-properties-select-font-style" class='input-medium layout-text' name="font-style-select">
+                                    <option id="font-properties-font-style-none" value="" <% if (fontStyle == ''){ %> selected<%}%> >  </option>
+                                    <option id="font-properties-font-style-normal" value="normal" <% if (fontStyle == 'normal'){ %> selected<%}%> > Normal </option>
+                                    <option id="font-properties-font-style-italic" value="italic" <% if (fontStyle == 'italic'){ %> selected<%}%> > Italic </option>
+                                    <option id="font-properties-font-style-oblique" value="oblique" <% if (fontStyle == 'oblique'){ %> selected<%}%> > Oblique </option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer" style="text-align: center">
+                    <button id="set-font-properties" class="btn btn-default" >Set</button>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <!-- BioGeneView template for backbone.js -->
+    <script type="text/template" id="biogene-template">
+        <div class='node-details-text'>
+            <table class="table table-condensed table-striped" cellspacing="10"> <tbody>
+                <tr class="biogene-info biogene-description node-details-summary">
+                    <th valign="top">Gene Summary:</th>
+                    <td colspan="2" class="expandable">
+                        <%=geneSummary %>
+                    </td>
+                </tr>
+                <tr class="biogene-info biogene-aliases">
+                    <th valign="top">Aliases:</th>
+                    <td>
+                        <%=geneAliases %>
+                    </td>
+                </tr>
+                <tr class="biogene-info biogene-description">
+                    <th>Description:</th>
+                    <td class="expandable">
+                        <%=geneDescription %>
+                    </td>
+                </tr>
+                <tr class="biogene-info biogene-location">
+                    <th valign="top">Chromosome Location:</th>
+                    <td>
+                        <%=geneLocation %>
+                    </td>
+                </tr>
+                <tr class="biogene-info biogene-uniprot-links">
+                    <th valign="top">UniProt ID:</th>
+                    <td>
+                        <a href='http://www.uniprot.org/uniprot/<%= geneUniprotId %>' target='blank'>
+                            <%=geneUniprotId %>
+                        </a>
+                        <span class='biogene-uniprot-links-extra'>
+            <%= geneUniprotLinks %>
+            </span>
+                    </td>
+                </tr>
+                <tr class="biogene-info biogene-id">
+                    <th valign="top">Gene ID:</th>
+                    <td>
+                        <a href='http://www.ncbi.nlm.nih.gov/gene?term=<%= geneId %>' target='blank'>
+                            <%=geneId %>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
+    </script>
+
+    <script type="text/template" id="uniprot-link-template">
+        <a href="http://www.uniprot.org/uniprot/<%= id %>" target="_blank">
+            <%=id %>
+        </a>
+    </script>
+
+    <script type="text/template" id="color-scheme-menu-template">
+        <% var i=0; for( var scheme_id in mapColorSchemes) { %>
+        <li><a href="#" class="map-color-scheme" id="map-color-scheme_<%= scheme_id %>"><%= mapColorSchemes[scheme_id]['name'] %></a></li>
+        <% i++;} %>
+    </script>
+
+    <script type="text/template" id="idxCard-template">
+        <div class='node-details-text'>
+            <table class="table-idxCard table-striped">
+
+                <% var i = 0; %>
+                <% _.each(idxCards, function(card, index) { %>
+
+                <tr><td>Card: <%= index %></td></tr>
+                <tr><td>Evidence: <%= card.evidence %></td></tr>
+                <tr><td>Participant a: <%= card.extracted_information.participant_a.entity_text %></td></tr>
+                <tr><td>Participant b: <%= card.extracted_information.participant_b.entity_text %></td></tr>
+                <tr><td>Interaction type: <%= card.extracted_information.interaction_type %></td></tr>
+
+                <% }); %>
+            </table>
+        </div>
+    </script>
+
+
+    <inspector-view:>
+
+        <div id ="inspector-tab-area" tabindex="1">
+
+
+            <div class="tab-content">
+                <div id="inspector-tabs">
+
+                    <ul class="nav nav-tabs">
+                        <li class = "active tab-link"><a data-toggle="tab" href="#factoid-area">Factoid</a></li>
+                        <li class = "tab-link"><a data-toggle="tab"  href="#chat-area">Chat</a></li>
+                        <li class = "tab-link"><a data-toggle="tab" href="#image-area">Image Share</a></li>
+                        <li class = "tab-link"><a data-toggle="tab" href="#sbgn-inspector">Sbgn Inspector</a></li>
+                        <!--<li class = "tab-link"><a data-toggle="tab" href="#command-history-area">Operations</a></li>-->
+
+                    </ul>
+                </div>
+
+
+                <!--<div id="sbgn-inspector" class="tab-pane"></div>      -->
+
+                <div id="sbgn-inspector" class="tab-pane">
+                    <ul class="nav nav-tabs">
+                        <li id='inspector-style-tab' class="chise-tab"><a data-toggle="tab" href="#sbgn-inspector-style"><img width="18px" height="18px" src="app/img/tabs/properties.svg"/> ;Properties</a></li>
+                        <li id='inspector-palette-tab' class="chise-tab active"><a data-toggle="tab" href="#sbgn-inspector-palette"><img width="18px" height="18px" src="app/img/tabs/palette.svg"/> ;Palette</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="sbgn-inspector-style" class="tab-pane fade">
+                            <div id="sbgn-inspector-style-panel-group" class="panel-group">
+                            </div>
+                        </div>
+                        <div id="sbgn-inspector-palette" class="tab-pane fade in active">
+                            <div class="panel-group">
+                                <div class="panel">
+                                    <div class="panel-heading" data-toggle="collapse" data-target="#expand-collapse-pd-nodes-palette">
+                                        <p class="panel-title accordion-toggle">
+                                            Process Description Nodes
+                                        </p>
+                                    </div>
+                                    <div id="expand-collapse-pd-nodes-palette" class="panel-collapse collapse in">
+                                        <div class="panel-body">
+                                            <table id="pd-node-palette" class="element-palette node-palette">
+                                                <tbody>
+                                                <tr>
+                                                    <td><div><img src="app/img/nodes/unspecified-entity.svg" value="unspecified-entity" title="Unspecified Entity"/></div></td>
+                                                    <td><div><img src="app/img/nodes/simple-chemical.svg" value="simple-chemical" title="Simple Chemical"/></div></td>
+                                                    <td><div><img src="app/img/nodes/macromolecule.svg" value="macromolecule" title="Macromolecule"/></div></td>
+                                                    <td><div><img src="app/img/nodes/nucleic-acid-feature.svg" value="nucleic-acid-feature" title="Nucleic Acid Feature"/></div></td>
+                                                    <td><div><img src="app/img/nodes/perturbing-agent.svg" value="perturbing-agent" title="Perturbing Agent"/></div></td>
+                                                    <td><div><img src="app/img/nodes/source-and-sink.svg" value="source-and-sink" title="Source and Sink"/></div></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><div><img src="app/img/nodes/complex.svg" value="complex" title="Complex"/></div></td>
+                                                    <td><div><img src="app/img/nodes/process.svg" value="process" title="Process"/></div></td>
+                                                    <td><div><img src="app/img/nodes/omitted-process.svg" value="omitted-process" title="Omitted Process"/></div></td>
+                                                    <td><div><img src="app/img/nodes/uncertain-process.svg" value="uncertain-process" title="Uncertain Process"/></div></td>
+                                                    <td><div><img src="app/img/nodes/association.svg" value="association" title="Association"/></div></td>
+                                                    <td><div><img src="app/img/nodes/dissociation.svg" value="dissociation" title="Dissociation"/></div></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><div><img src="app/img/nodes/phenotype.svg" value="phenotype" title="Phenotype"/></div></td>
+                                                    <td><div><img src="app/img/nodes/compartment.svg" value="compartment" title="Compartment"/></div></td>
+                                                    <td><div><img src="app/img/nodes/tag.svg" value="tag" title="Tag"/></div></td>
+                                                    <td><div><img src="app/img/nodes/and.svg" value="and" title="AND"/></div></td>
+                                                    <td><div><img src="app/img/nodes/or.svg" value="or" title="OR"/></div></td>
+                                                    <td><div><img src="app/img/nodes/not.svg" value="not" title="NOT"/></div></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel">
+                                    <div class="panel-heading" data-toggle="collapse" data-target="#expand-collapse-pd-edges-palette">
+                                        <p class="panel-title accordion-toggle">
+                                            Process Description Edges
+                                        </p>
+                                    </div>
+                                    <div id="expand-collapse-pd-edges-palette" class="panel-collapse collapse in">
+                                        <div class="panel-body">
+                                            <table id="pd-edge-palette" class="element-palette edge-palette">
+                                                <tbody>
+                                                <tr>
+                                                    <td><div><img src="app/img/edges/consumption.svg" value="consumption" title="Consumption"/></div></td>
+                                                    <td><div><img src="app/img/edges/production.svg" value="production" title="Production"/></div></td>
+                                                    <td><div><img src="app/img/edges/modulation.svg" value="modulation" title="Modulation"/></div></td>
+                                                    <td><div><img src="app/img/edges/stimulation.svg" value="stimulation" title="Stimulation"/></div></td>
+                                                    <td><div><img src="app/img/edges/catalysis.svg" value="catalysis" title="Catalysis"/></div></td>
+                                                    <td><div><img src="app/img/edges/inhibition.svg" value="inhibition" title="Inhibition"/></div></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><div><img src="app/img/edges/necessary-stimulation.svg" value="necessary-stimulation" title="Necessary Stimulation"/></div></td>
+                                                    <td><div><img src="app/img/edges/consumption.svg" value="logic-arc" title="Logic Arc"/></div></td>
+                                                    <td><div><img src="app/img/edges/consumption.svg" value="equivalence-arc" title="Equivalance Arc"/></div></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id = "factoid-area" class = "tab-pane fade in active">
+
+                    <div id= "factoid-input-container">
+
+
+                        <table  border="0" cellpadding="2" width="100%" align="top">
+                            <tbody>
+
+
+                            <tr>
+                                <td class='instructions'>Load a manuscript from file </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="factoid-file-input" class="image-file">
+                                        <i class="fa fa-file-text-o"></i> Select File
+                                    </label>
+
+                                    <input type="file" id="factoid-file-input" accept=".txt,.pdf">
+                                </td>
+
+                            </tr>
+
+                            <tr>
+                                <td align="left" height="8">
+                                    <b><font color=white  face="Verdana" size="2">Or&nbsp;</font></b>
+                                </td>
+                            </tr>
+
+                            <!--<tr>-->
+                            <!--<td  class = "instructions"  align="left" height="15">-->
+                            <!--Enter PMC ID: <input id="pmcBox" type = "text" value = <%= pmcID %>></input>-->
+                            <!--<input type="button" id = "pmc-id-submit-button"  value="Load">-->
+
+
+                            <tr>
+                                <td  class = "instructions"  align="left" height="15">
+                                    Write/paste directly into the text box
+                                </td>
+                            </tr>
+                            <tr>
+                                <td  valign="top" align="left" >
+                                    <textarea rows="30" id="factoidBox"> </textarea>
+                                </td>
+
+
+                            </tr>
+
+
+                            <tr>
+                                <td><input type="button" id = "factoid-text-clear-button"  value="Clear"> &nbsp;&nbsp;&nbsp;
+
+                                    <input type="button" id = "factoid-text-submit-button"  value="Submit"  class='upload'>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <div id ="chat-area"  class="tab-pane ">
+                    <div id = "users" as="container"  on-change = "onScroll()">
+                        <!--<ul id ="user-list" as = "list">-->
+                        <form action=""">
+                        {{each _page.doc.userIds as #pUserId}}
+                        <!--<li>-->
+                        <view is="chat-user"></view>
+                        <!--</li>-->
+                        {{/each}}
+                        </form>
+                        <!--</ul>-->
+
+                    </div>
+
+
+                    <ul id="messages" as="list">
+                        <!--on-change = "onScroll()">-->
+                        {{each _page.list as #message}}
+                        <view is="chat-message"></view>
+                        {{/each}}
+                    </ul>
+
+                    <button id = "clear-history" class = "btn  btn-mini" on-click ="clearHistory()">Clear chat </button>
+
+
+
+                    <!--</div>-->
+                    <div id="inputs">
+                        User name: <input id="inputs-name" value="{{_page.doc.users[_session.userId].name}}">
+                        <button id = "change-user-color" class = "btn btn-mini" on-click ="changeColorCode()">New user color</button>
+                        <form id="inputs-form" on-submit="add($event)">
+                        <!--<form id="inputs-form">-->
+                            <textarea id="inputs-comment" rows="3", wrap ="soft" on-keypress="enterMessage($event)">{{_page.newComment}}</textarea>
+                            <!--<input id="inputs-comment" rows = "3", wrap = "soft" style = {{_page.newComment.style}} type = "text">{{_page.newComment.text}}</input>-->
+
+                            <button  class = "btn btn-info" id = "send-message">Send</button>
+
+                        </form>
+
+
+                    </div>
+                </div>
+
+                <div id = "image-area" class="tab-pane">
+                    <div id = "receivedImages" class="tab-pane">
+                        {{ each _page.doc.images as #imageFile}}
+                        <br>
+                        {{#imageFile.fileName}}
+                        <div class = image> <img src= "{{#imageFile.img}}" onclick ="openImage(this)" onmouseover ="showQTip(this)" /> </div>
+                        {{/each}}
+                    </div>
+
+
+
+                    <div id = "upload-image">
+                        <label for="file-upload" class="image-file">
+                            <i class="fa fa-cloud-upload"></i> Upload Image
+                        </label>
+
+                        <div><input type="file" id="file-upload" accept="image/*" on-change = "uploadFile($event)" value = {{_page.newFile}}></div>
+
+                    </div>
+
+                </div>
+
+                <!--<div id ="command-history-area" class="tab-pane" as = "list">-->
+                    <!--<ul id = "command-messages">-->
+                    <!--&lt;!&ndash;<ul id ="command-list" as = "list" >&ndash;&gt;-->
+                    <!--{{each _page.doc.history as #pCommand}}-->
+                        <!--&lt;!&ndash;FUNDA CLOSED FOR NOW&ndash;&gt;-->
+                    <!--&lt;!&ndash;<li> <b>{{#pCommand.userName}} {{_page.showTime && formatTime(#pCommand)}} > </b>{{#pCommand.opName}} {{#pCommand.opTarget}} {{formatObj(#pCommand.elId)}} {{#pCommand.opAttr}} {{formatObj(#pCommand.param)}}&ndash;&gt;-->
+                    <!--<li> <b>{{#pCommand.userName}} {{_page.showTime && formatTime(#pCommand)}} > </b>{{#pCommand.opName}}-->
+                    <!--</li>-->
+                    <!--{{/each}}-->
+                    <!--&lt;!&ndash;</ul>&ndash;&gt;-->
+                    <!--</ul>-->
+                <!--</div>-->
+
+            </div>
+
+
+        </div>
+
+
+        <audio id="notificationAudio" src="http://www.talkingwav.com/various/beep_02.wav" preload="auto"></audio>
+
+        <!--<div id ="unitTestArea"> <button class="btn btn-info btn-mini" on-click = "runUnitTests()"> Test</button></div>-->
+
+        <chat-user:>
+            <div class="user" style = background:{{_page.doc.users[#pUserId].colorCode}}>
+                {{if _session.userId === #pUserId}}
+                <div> {{_page.doc.users[#pUserId].name}}</div>
+                {{else}}
+                <input type="checkbox" id = {{#pUserId}} checked> {{_page.doc.users[#pUserId].name}}<br>
+                {{/if}}
+            </div>
+            <chat-message:>
+            <table class = "message" align="center" valign="center">
+                <tbody>
+                <tr>
+                    <td style = "font-size:large; color:{{_page.doc.users[#message.userId].colorCode}};  padding : 5px">
+                        {{#message.userName}}
+                    </td>
+                    <td class="time" style = "padding : 5px">
+                        {{_page.showTime && formatTime(#message)}}
+                    </td>
+
+                </tr>
+                <tr><td  style = "padding : 10px">
+
+                    <p style = "font-size:large">{{ unescaped #message.comment}}</p>
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+
+
+
+
+
+<script>
+    function showQTip(el) {
+        $(el).parent().qtip({
+            content: {
+                text: function () {
+
+                    return "Click image to enlarge ";
+                }
+
+            },
+
+            position: {
+                my: 'center',
+                at: 'center',
+                adjust: {
+                    cyViewport: true
+                },
+                effect: false
+            },
+            mouseover: true,
+            style: {
+                classes: 'qtip-image',
+
+                tip: {
+                    width: 16,
+                    height: 8
+                }
+            }
+        });
+    }
+    function openImage(el){
+        if(el.src){
+            var url = el.src;
+            window.open(url, 'Image', 'width=largeImage.stylewidth,height=largeImage.style.height,resizable=1');
+        }
+
+    }
+</script>
+
+
