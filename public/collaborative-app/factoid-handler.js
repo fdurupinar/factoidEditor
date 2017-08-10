@@ -3,9 +3,6 @@
  */
 
 
-
-
-
 module.exports =  function(app, modelManager) {
 
     var idxcardjson = require('./reach-functions/idxcardjson-to-json-converter.js');
@@ -71,18 +68,11 @@ module.exports =  function(app, modelManager) {
 
             var p = new Promise(function (resolve) {
                 socket.emit("REACHQuery", "indexcard", inputStr, function (data) {
-                        //      console.log(line);
-
-
                         var cards = JSON.parse(data).cards;
-                        // console.log(cards);
 
                         cards.forEach(function(card){
                             var jsonData = idxcardjson.createJson({cards: [card]});
-
-                                jsonGraphs.push({sentence: card.evidence[0], json: jsonData, idxCard:card});
-
-
+                            jsonGraphs.push({sentence: card.evidence[0], json: jsonData, idxCard:card});
                         });
 
 
@@ -91,8 +81,6 @@ module.exports =  function(app, modelManager) {
 
 
 
-                        //TODO: merge will be implemented
-                        //nodeMap = modelManager.mergeJsons(jsonGraphs); //mapping between sentences and node labels
                     nodeMap = app.mergeJsons(jsonGraphs); //mapping between sentences and node labels
 
 
@@ -124,23 +112,16 @@ module.exports =  function(app, modelManager) {
             var el  = $('#factoidBox');
 
 
-
-            console.log(nodeId);
-
-
             if(highlightColor == null){
                 el.highlightTextarea('destroy');
                 return;
             }
-
-
 
             var sentences = nodeMap.sentences[nodeId];
 
             var idxCards = nodeMap.idxCards[nodeId];
             console.log(nodeMap);
 
-            // console.log(idxCards);
 
 
             cy.$(('#' + nodeId)).qtip({
@@ -246,8 +227,6 @@ module.exports =  function(app, modelManager) {
 
 
         loadFactoidPMC: function() {
-
-
 
             var link = "https://www.ncbi.nlm.nih.gov/pmc/articles/" + $('#pmcBox').val() ;
             socket.emit("HTTPRequest", link,  function(result){

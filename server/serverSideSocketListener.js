@@ -187,6 +187,17 @@ module.exports.start = function(io, model){
         });
 
 
+        socket.on('pdfConvertRequest', function(binData, callback){
+
+            var pdf2Text = require('pdf2text');
+
+            pdf2Text(binData).then(function(pages) {
+                if(callback) callback(pages);
+            });
+
+        });
+
+
         socket.on('REACHQuery',  function(outputType, msg, callback){
             var queryParams = "text=" + msg + "&output=" + outputType; //fries";
 

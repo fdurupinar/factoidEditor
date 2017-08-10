@@ -47,6 +47,7 @@ body {
     margin: 10px;
     height: 40px;
     width: 1000px;
+
 }
 
 .sbgn-nav-menu .dropdown .dropdown-menu{
@@ -196,7 +197,7 @@ body {
 
     right: 0px;
     z-index: 1000000;
-    border: 1px solid #ddd;
+
 
 }
 
@@ -295,7 +296,6 @@ body {
 .sbgn-nav-bar {
     margin: auto;
     width: 1000px;
-    overflow: auto !important;
     font-size: 12px !important;
     min-height: 0px;
 }

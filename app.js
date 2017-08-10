@@ -11,9 +11,6 @@ var bs;
 
 
 app.loadViews(__dirname + '/views');
-//app.loadStyles(__dirname + '/styles');
-//app.serverUse(module, 'derby-stylus');
-
 
 var testMode = true;
 var ONE_DAY = 1000 * 60 * 60 * 24;
@@ -278,6 +275,7 @@ app.proto.create = function (model) {
 
     socket = io();
 
+
     $('#messages').contentchanged = function () {
 
         $('#messages').scrollTop($('#messages')[0].scrollHeight  - $('.message').height());
@@ -345,8 +343,7 @@ app.proto.create = function (model) {
 
     if(!isQueryWindow) { //initialization for a regular window
         var isModelEmpty = self.loadCyFromModel();
-        console.log("no query");
-        //TODO????????????????
+
         setTimeout(function () {
             if (isModelEmpty)
                 modelManager.initModel(cy.nodes(), cy.edges(), appUtilities, "me");
