@@ -1,7 +1,7 @@
 version: "2"
 services:
   web:
-    image: fdurupinar/sbgnviz:latest 
+    image: fdurupinar/factoid:latest
     ports:
       - "3000:3000"
     links:
