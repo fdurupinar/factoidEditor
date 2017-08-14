@@ -2,7 +2,6 @@ var readline = require('readline');
 var stream = require('stream');
 var fs = require('fs');
 
-var useBiopax = true;
 
 module.exports.start = function(io, model){
     var modelManagerList = [];
@@ -322,42 +321,41 @@ module.exports.start = function(io, model){
         socket.on('BioPAXRequest', function(fileContent, reqType, callback){
 
 
-            if(useBiopax) {
+            console.log(callback);
 
 
-                //  request('http://localhost:8080/SBGNConverterServlet' , function (error, response, body) {
+            request.post({
+                url: "http://localhost:8080/PaxtoolsServlet",
+                headers: responseHeaders,
+                form: {reqType: reqType, content: fileContent}
+            }, function (error, response, body) {
 
-                request.post({
-                    url: "http://localhost:8080/PaxtoolsServlet",
-                    headers: responseHeaders,
-                    form: {reqType: reqType, content: fileContent}
-                }, function (error, response, body) {
+                if (error) {
+                    console.log(error);
+                } else { //only open the window if a proper response is returned
 
+                    if (response.statusCode == 200) {
 
-                    if (error) {
-                        console.log(error);
-                    } else { //only open the window if a proper response is returned
-
-                        if (response.statusCode == 200) {
-
-                            if(reqType == "partialBiopax"){
-                                io.in(socket.room).emit("processToIntegrate", body);
-
-                            }
-                            if(callback)
-                                callback({graph:body});
-
-
+                        if(reqType == "partialBiopax"){
+                            io.in(socket.room).emit("processToIntegrate", body);
 
                         }
-                        else
-                            socket.emit("Paxtools Server Error", "error");
+
+
+                        if(callback) {
+                            callback({graph: body});
+                        }
+
 
 
                     }
-                });
+                    else
+                        socket.emit("Paxtools Server Error", "error");
 
-            }
+
+                }
+            });
+
         });
 
     });

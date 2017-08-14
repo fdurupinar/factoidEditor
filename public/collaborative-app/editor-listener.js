@@ -5,7 +5,7 @@
 //Listen and respond to cytoscape events triggered by cytoscape-undo-redo.js
 
 
-module.exports = function(modelManager, userId){
+module.exports = function(modelManager, socket, userId){
 
     //A new sample or file is loaded --update model and inform others
    $(document).on("sbgnvizLoadSampleEnd sbgnvizLoadFileEnd",  function(event, file){
@@ -16,9 +16,37 @@ module.exports = function(modelManager, userId){
     });
 
 
+    $("#file-input").change(function () {
+
+        if ($(this).val() != "") {
+            var file = this.files[0];
 
 
-    $(document).on("saveLayout", function (evt) {
+            var extension = file.name.split('.').pop().toLowerCase();
+
+            if (extension === "owl") {
+
+
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+
+                    socket.emit('BioPAXRequest', this.result, "sbgn", function(sbgnData){ //convert to sbgn
+
+                        sbgnviz.loadSBGNMLText(sbgnData.graph);
+                    });
+                };
+                reader.readAsText(file);
+
+
+            }
+        }
+
+    });
+
+
+
+        $(document).on("saveLayout", function (evt) {
          var layoutProperties = appUtilities.currentLayoutProperties;
         modelManager.updateLayoutProperties(layoutProperties, "me");
     });
