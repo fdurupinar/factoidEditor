@@ -18,7 +18,8 @@ function setup(app, options, cb) {
         process.env.MONGOHQ_URL ||
         'mongodb://' +
          (process.env.MONGO_HOST || 'localhost') + ':' +
-     //  (process.env.MONGO_HOST || 'mongo') + ':' + //for dockerization
+    //   (process.env.MONGO_HOST || 'mongo') + ':' + //for dockerization
+
         (process.env.MONGO_PORT || 27017) + '/' +
         (process.env.MONGO_DB || 'derby-' + (app.name || 'app'));
 

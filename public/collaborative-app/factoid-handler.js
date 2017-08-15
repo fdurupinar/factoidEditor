@@ -25,6 +25,7 @@ module.exports =  function(app, modelManager) {
 
 
             $('#factoidBox')[0].value = text;
+            $('#factoidBox')[0].value = text;
 
             var factoidModel = modelManager.getFactoidModel();
 
@@ -81,14 +82,17 @@ module.exports =  function(app, modelManager) {
 
 
 
-                    nodeMap = app.mergeJsons(jsonGraphs); //mapping between sentences and node labels
-
-
-                     console.log(jsonGraphs);
-
+                    nodeMap = app.mergeJsons(jsonGraphs, function(){
 
                         //save it to the model
                         modelManager.updateFactoidModel({jsonGraphs: jsonGraphs, nodeMap: nodeMap, text: text}, "me");
+
+                    }); //mapping between sentences and node labels
+
+
+                     //console.log(jsonGraphs);
+
+
 
 
 

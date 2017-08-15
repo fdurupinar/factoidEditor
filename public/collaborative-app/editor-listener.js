@@ -16,6 +16,7 @@ module.exports = function(modelManager, socket, userId){
     });
 
 
+
     $("#file-input").change(function () {
 
         if ($(this).val() != "") {
@@ -42,6 +43,13 @@ module.exports = function(modelManager, socket, userId){
             }
         }
 
+        setTimeout(function () {
+                modelManager.initModel(cy.nodes(), cy.edges(), appUtilities, "me");
+
+
+
+        }, 1000);
+
     });
 
 
@@ -65,6 +73,7 @@ module.exports = function(modelManager, socket, userId){
         cy.remove(cy.elements());
         modelManager.newModel("me"); //do not delete cytoscape, only the model
     });
+
 
     cy.on("afterDo afterRedo", function (event, actionName, args, res) {
 

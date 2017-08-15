@@ -183,27 +183,12 @@ app.get('/:docId', function (page, model, arg, next) {
 
                     users.set(userId, {name: userName, colorCode: colorCode});
 
-
-
-
-                     //   model.set('_page.newComment', "how does SETDB1 affect ADAM17?"); //TODO: delete later
-                   //     model.set('_page.newComment', "How does KRAS activate MAPK3?"); //TODO: delete later
-          //          model.set('_page.newComment', "How does MAPK1 affect JUND?"); //TODO: delete later
-               //     model.set('_page.newComment', "What genes does MAPK1 phosphorylate?"); //TODO: delete later
-               //     model.set('_page.newComment', "How does  ITGAV affect ILK?"); //TODO: delete later
-           //        model.set('_page.newComment', "What genes activate ILK?"); //TODO: delete later
-            //        model.set('_page.newComment', "How does KRAS activate MAPK3?"); //TODO: delete later
-
-
                     return page.render();
                 });
             });
 
         });
     });
-
-
-
 
 });
 
@@ -429,6 +414,9 @@ app.proto.loadCyFromModel = function(){
         props = modelManager.getGridProperties();
         if(props) appUtilities.currentGridProperties = props;
 
+        //reset to the center
+        cy.panzoom().reset();
+
     }
     return (jsonArr == null);
 }
@@ -458,6 +446,7 @@ app.proto.listenToNodeOperations = function(model){
 
 
     });
+
 
     //Update inspector
 
@@ -517,6 +506,12 @@ app.proto.listenToNodeOperations = function(model){
         if(docReady && passed.user == null) {
             var posDiff = {x: (pos.x - cy.getElementById(id).position("x")), y:(pos.y - cy.getElementById(id).position("y"))} ;
             moveNodeAndChildren(posDiff, cy.getElementById(id)); //children need to be updated manually here
+
+
+//            $('.cy-panzoom-reset').trigger('mousedown');
+
+
+
 
         }
     });
@@ -828,10 +823,12 @@ app.proto.init = function (model) {
 
 
 
-    model.on('all', '_page.doc.factoid.*', function(id, op, val, prev, passed){
+    model.on('all', '_page.doc.factoid', function( op, val, prev, passed){
 
         if(docReady &&  passed.user == null) {
             factoidHandler.setFactoidModel(val);
+            cy.panzoom().reset();
+
         }
 
 
@@ -1068,6 +1065,9 @@ app.proto.dynamicResize = function (images) {
         $("#sbgn-network-container").width( wCanvasTab* 0.99);
         $("#canvas-tabs").width( wCanvasTab* 0.99);
 
+
+
+
         if(images) {
             images.forEach(function (img) {
                 $("#static-image-container-" + img.tabIndex).width(wCanvasTab * 0.99);
@@ -1202,7 +1202,7 @@ app.proto.mergeSbgn = function(sbgnText, callback){
 };
 
 //Merge an array of json objects to output a single json object.
-app.proto.mergeJsons = function(jsonGraph) {
+app.proto.mergeJsons = function(jsonGraph, callback) {
     var idxCardNodeMap = {};
     var sentenceNodeMap = {};
 
@@ -1216,18 +1216,18 @@ app.proto.mergeJsons = function(jsonGraph) {
 
     setTimeout(function(){
         modelManager.initModel(cy.nodes(), cy.edges(), appUtilities, "me");
-    },1000); //wait for chise to complete updating graph
+
+        $("#perform-layout").trigger('click');
+
+        //Call merge notification after the layout
+        setTimeout(function(){
+            modelManager.mergeJsons("me", true);
+
+            if(callback) callback();
+        }, 1000);
 
 
-
-
-    $("#perform-layout").trigger('click');
-
-    //Call merge notification after the layout
-    setTimeout(function(){
-        modelManager.mergeJsons("me", true);
-    }, 1000);
-
+    },2000); //wait for chise to complete updating graph
     return {sentences: sentenceNodeMap, idxCards: idxCardNodeMap};
 };
 
@@ -1242,13 +1242,7 @@ app.proto.mergeJsonWithCurrent = function(jsonGraph, callback) {
     modelManager.newModel( "me", true);
     //this takes a while so wait before initiating the model
     chise.updateGraph(jsonObj);
-    //DEBUG
-    // cy.nodes().forEach(function (node){
-    //     if(node._private.data == null){
-    //         console.log("Data not assigned");
-    //         console.log(node);
-    //     }
-    // });
+
 
     setTimeout(function() {
         modelManager.initModel(cy.nodes(), cy.edges(), appUtilities, "me");
@@ -1260,6 +1254,7 @@ app.proto.mergeJsonWithCurrent = function(jsonGraph, callback) {
 
         //Call Layout
         $("#perform-layout").trigger('click');
+
 
         //Call merge notification after the layout
         setTimeout(function(){
