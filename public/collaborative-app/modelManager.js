@@ -1218,7 +1218,6 @@ module.exports = function (model, docId) {
             var modelCy = model.get('_page.doc.cy');
             var prevModelCy = model.get('_page.doc.prevCy');
 
-
             if (!noHistUpdate) {
 
                 this.updateHistory({opName: 'merge', prevParam: prevModelCy, param: modelCy, opTarget: 'model'});

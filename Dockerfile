@@ -14,4 +14,5 @@ COPY . /usr/src/factoid
 
 EXPOSE 3000
 
-CMD [ "MONGO_HOST=mongo ", "npm", "start"]
+#CMD [ "MONGO_HOST=mongo ", "npm", "start"]
+CMD [  "npm", "start"]
